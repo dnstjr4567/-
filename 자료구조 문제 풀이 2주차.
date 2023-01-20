@@ -1,0 +1,409 @@
+///스택 문제 
+#ifndef ARRAYSTACK_H
+#define ARRAYSTACK_H
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> 
+typedef int ElementType;
+///10828
+typedef struct tagNode
+{
+    ElementType Data;
+} Node;
+
+typedef struct tagArrayStack
+{
+    int   Capacity;
+    int   Top;
+    Node* Nodes;
+} ArrayStack;
+
+void        AS_CreateStack(ArrayStack** Stack, int Capacity);
+void        AS_DestroyStack(ArrayStack* Stack);
+void        AS_Push(ArrayStack* Stack, ElementType Data);
+ElementType AS_Pop(ArrayStack* Stack);
+ElementType AS_Top(ArrayStack* Stack);
+int         AS_GetSize(ArrayStack* Stack);
+int         AS_IsEmpty(ArrayStack* Stack);
+int         AS_IsFull(ArrayStack* Stack);
+
+#endif
+
+
+void  AS_CreateStack(ArrayStack** Stack, int Capacity)
+{
+    //  스택을 자유 저장소에 생성 
+    (*Stack) = (ArrayStack*)malloc(sizeof(ArrayStack));
+
+    //  입력된 Capacity만큼의 노드를 자유 저장소에 생성 
+    (*Stack)->Nodes = (Node*)malloc(sizeof(Node) * Capacity);
+
+    //  Capacity 및 Top 초기화 
+    (*Stack)->Capacity = Capacity;
+    (*Stack)->Top = -1;
+}
+
+void AS_DestroyStack(ArrayStack* Stack)
+{
+    //  노드를 자유 저장소에서 해제 
+    free(Stack->Nodes);
+
+    //  스택을 자유 저장소에서 해제 
+    free(Stack);
+}
+
+void AS_Push(ArrayStack* Stack, ElementType Data)
+{
+    Stack->Top++;
+    Stack->Nodes[Stack->Top].Data = Data;
+}
+
+ElementType AS_Pop(ArrayStack* Stack)
+{
+    int Position = Stack->Top--;
+    return Stack->Nodes[Position].Data;
+}
+
+ElementType AS_Top(ArrayStack* Stack)
+{
+    return Stack->Nodes[Stack->Top].Data;
+}
+
+int AS_GetSize(ArrayStack* Stack)
+{
+    return Stack->Top + 1;
+}
+
+int AS_IsEmpty(ArrayStack* Stack)
+{
+    return (Stack->Top == -1);
+}
+int AS_IsFull(ArrayStack* Stack)
+{
+    if (Stack->Top == Stack->Capacity)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+
+int main(void)
+{
+    int n,i=0,l;
+    char* input[20];
+    ArrayStack* Stack = NULL;
+    scanf("%d", &n);
+    AS_CreateStack(&Stack, n);
+    while (n >0)
+    {
+        scanf("%s", &input);
+        if (strcmp(input, "push") == 0)
+        {
+            int d;
+            scanf("%d", &d);
+            AS_Push(Stack, d);
+        }
+        else if (strcmp(input, "pop") == 0)
+        {
+            if (AS_IsEmpty(Stack)) { printf("-1\n"); }
+            else { printf("%d\n", AS_Pop(Stack)); }
+        }
+        else if (strcmp(input, "size") == 0)
+        {
+            
+            printf("%d\n", AS_GetSize(Stack)); 
+        }
+        else if (strcmp(input, "empty") == 0)
+        {
+            if (AS_IsEmpty(Stack))
+            {
+                printf("1\n");
+            }
+            else { printf("0\n"); }
+        }
+        else if (strcmp(input, "top") == 0)
+        {
+            if (AS_IsEmpty(Stack)) { printf("-1\n"); }
+            else { printf("%d\n", AS_Top(Stack)); }
+        }
+        
+        n--;
+    }
+    AS_DestroyStack(Stack);
+
+    return 0;
+}
+
+
+
+10773번
+
+int main(void)
+{
+    int n, sum=0,input,i,k;
+    ArrayStack* Stack = NULL;
+    scanf("%d", &n);
+    k = n;
+    AS_CreateStack(&Stack, n);
+    while (n > 0)
+    {
+        scanf("%d", &input);
+        if (input != 0)
+        {
+            AS_Push(Stack, input);
+        }
+        else
+        {
+            AS_Pop(Stack);
+            ///printf("top : %d\n", AS_Top(Stack));
+        }
+        n--;
+    }
+    for(int j = 0;j<k;j++)
+    {
+        
+        if(Stack->Top==-1)
+        {
+            break;
+        }
+        i = AS_Pop(Stack);
+        sum =sum + i ;
+       
+    }
+    
+    printf("%d", sum);
+    return 0;
+}
+
+///큐 문제풀이
+///18258번
+#ifndef CIRCULAR_QUEUE_H
+#define CIRCULAR_QUEUE_H
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef int ElementType;
+
+typedef struct tagNode
+{
+    ElementType Data;
+} Node;
+
+typedef struct tagCircularQueue
+{
+    int   Capacity;
+    int   Front;
+    int   Rear;
+
+    Node* Nodes;
+} CircularQueue;
+
+void        CQ_CreateQueue(CircularQueue** Queue, int Capacity);
+void        CQ_DestroyQueue(CircularQueue* Queue);
+void        CQ_Enqueue(CircularQueue* Queue, ElementType Data);
+ElementType CQ_Dequeue(CircularQueue* Queue);
+int         CQ_GetSize(CircularQueue* Queue);
+int         CQ_IsEmpty(CircularQueue* Queue);
+int         CQ_IsFull(CircularQueue* Queue);
+int         CQ_Front(CircularQueue* Queue);
+int         CQ_Back(CircularQueue* Queue);
+#endif
+
+void  CQ_CreateQueue(CircularQueue** Queue, int Capacity)
+{
+    //  큐를 자유 저장소에 생성 
+    (*Queue) = (CircularQueue*)malloc(sizeof(CircularQueue));
+
+    //  입력된 Capacity+1 만큼의 노드를 자유 저장소에 생성 
+    (*Queue)->Nodes = (Node*)malloc(sizeof(Node) * (Capacity + 1));
+
+    (*Queue)->Capacity = Capacity;
+    (*Queue)->Front = 0;
+    (*Queue)->Rear = 0;
+}
+
+void CQ_DestroyQueue(CircularQueue* Queue)
+{
+    free(Queue->Nodes);
+    free(Queue);
+}
+
+void CQ_Enqueue(CircularQueue* Queue, ElementType Data)
+{
+    int Position = 0;
+
+    if (Queue->Rear == Queue->Capacity)
+    {
+        Position = Queue->Rear;
+        Queue->Rear = 0;
+    }
+    else
+        Position = Queue->Rear++;
+
+    Queue->Nodes[Position].Data = Data;
+}
+
+ElementType CQ_Dequeue(CircularQueue* Queue)
+{
+    int Position = Queue->Front;
+
+    if (Queue->Front == Queue->Capacity)
+        Queue->Front = 0;
+    else
+        Queue->Front++;
+
+    return Queue->Nodes[Position].Data;
+}
+
+int CQ_GetSize(CircularQueue* Queue)
+{
+    if (Queue->Front <= Queue->Rear)
+        return Queue->Rear - Queue->Front;
+    else
+        return Queue->Rear + (Queue->Capacity - Queue->Front) + 1;
+}
+
+int CQ_IsEmpty(CircularQueue* Queue)
+{
+    return (Queue->Front == Queue->Rear);
+}
+int CQ_IsFull(CircularQueue* Queue)
+{
+    if (Queue->Front < Queue->Rear)
+        return (Queue->Rear - Queue->Front) == Queue->Capacity;
+    else
+        return (Queue->Rear + 1) == Queue->Front;
+}
+int CQ_Front(CircularQueue* Queue)
+{
+    return Queue->Nodes[Queue->Front].Data;
+}
+int CQ_Back(CircularQueue* Queue)
+{
+    return Queue->Nodes[Queue->Rear-1].Data;
+}
+int main()
+{
+    int n;
+    char* input[20];
+    CircularQueue* queue;
+    scanf("%d", &n);
+    CQ_CreateQueue(&queue, n);
+    while (n>0)
+    {
+        scanf("%s", &input);
+        if (strcmp(input ,"push")==0)
+        {
+            int d;
+            scanf("%d", &d);
+            CQ_Enqueue(queue, d);
+        }
+        else if (strcmp(input, "pop") == 0)
+        {
+            int d;
+            scanf("%d", &d);
+            if (CQ_IsEmpty(queue)) { printf("-1\n"); }
+            else { printf("%d\n",CQ_Dequeue(queue)); }
+        }
+        else if (strcmp(input, "size") == 0)
+        {
+
+            printf("%d\n", CQ_GetSize(queue));
+        }
+        else if (strcmp(input, "empty") == 0)
+        {
+            if (CQ_IsEmpty(queue))
+            {
+                printf("1\n");
+            }
+            else { printf("0\n"); }
+        }
+        else if (strcmp(input, "front") == 0)
+        {
+            if (CQ_IsEmpty(queue)) { printf("-1\n"); }
+            else { printf("%d\n", CQ_Front(queue)); }
+        }
+        else if (strcmp(input,"back")==0)
+        {
+            if (CQ_IsEmpty(queue)) { printf("-1\n"); }
+            else { printf("%d\n", CQ_Back(queue)); }
+        }
+
+        n--;
+    }
+
+    return 0;
+}
+///2164번
+int main()
+{
+    char* input[20];
+    CircularQueue* queue;
+    int n, cnt=0;
+    scanf("%d", &n);
+    CQ_CreateQueue(&queue, n);
+    for (int i = 1;i <= n;i++)
+    {
+        CQ_Enqueue(queue, i);
+    }
+    while (CQ_GetSize(queue)>1)
+    {
+        int x = CQ_Dequeue(queue);
+        int y = CQ_Dequeue(queue);
+        CQ_Enqueue(queue, y);
+        if (CQ_GetSize(queue) == 1)
+        {
+            printf("%d", CQ_Dequeue(queue));
+            break;
+        }
+    }
+    if(CQ_GetSize(queue)==1)
+        printf("%d", CQ_Dequeue(queue));
+
+    return 0;
+}
+///11866번
+int main()
+{
+    int n,k,cnt=0;
+    char* input[20];
+    CircularQueue* queue;
+    scanf("%d %d", &n,&k);
+    CQ_CreateQueue(&queue, n);
+    printf("<");
+    for (int i = 1;i <= n;i++)
+    {
+        CQ_Enqueue(queue, i);
+    }
+    while (!CQ_IsEmpty(queue))
+    {
+        cnt++;
+        int x = CQ_Dequeue(queue);
+        if (cnt == k)
+        {
+            if (CQ_IsEmpty(queue))
+            {
+                printf("%d", x);
+            }
+            else
+            {
+                printf("%d, ", x);
+            }
+            cnt = 0;
+        }
+        else
+        {
+            CQ_Enqueue(queue, x);
+        }
+
+    }
+    printf(">");
+
+    return 0;
+}
