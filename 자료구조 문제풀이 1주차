@@ -1,0 +1,258 @@
+조건문
+2884번
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Console;
+
+namespace bjex
+{
+     
+class Program
+    {
+        
+        static void Main(string[] args)
+        {
+            int[] hm = Array.ConvertAll(ReadLine().Split(), int.Parse);
+            int h = hm[0];
+            int m = hm[1];
+            if (m - 45 < 0)
+            { 
+                m = 60 + m - 45;h = h - 1;
+                if (h < 0) { h = 24 + h; }
+            }
+            else { m = m - 45; }
+            WriteLine($"{h} {m}");
+        }
+
+            
+    }
+
+}
+2525번
+using System;
+using System.Collections;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Console;
+using System.Numerics;
+
+
+namespace Ex
+{
+    class MainApp
+    {
+
+        static void Main()
+        {
+            int[] HM = Array.ConvertAll(ReadLine().Split(), int.Parse);
+            int H = HM[0];
+            int M = HM[1];
+            int time = int.Parse(ReadLine());
+            int minute = M + time;
+            if (minute < 60) { WriteLine($"{H} {M + time}"); }
+            else if(time+M >= 60) 
+            {
+                H = H + (minute / 60);
+                if (H > 23) { H = H - 24; }
+                minute = minute % 60;
+                WriteLine($"{H} {minute}");
+            }
+        }
+    }
+}
+
+
+반복문
+2439번
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Console;
+namespace ConsoleApp37
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = n; j >i; j--)
+                {
+                    Write(" ");
+                }
+                for (int j = 0; j < i; j++)
+                {
+                    Write('*');
+                }
+                
+                WriteLine();
+            }
+            
+
+        }
+    }
+}
+1110번
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Console;
+
+namespace 백준
+{
+    class MainApp
+    {
+        static void Main()
+        {
+            int i = int.Parse(ReadLine());
+            int cnt = 1;
+            int sum = 0;
+            int n = i / 10 + i % 10;
+            sum = i % 10*10 + n % 10;
+            if (i == 0) { cnt = 0; }
+            while (true)
+            {
+                
+                sum = (sum / 10 + sum % 10) % 10 + sum % 10 * 10;
+                cnt++;
+                if (sum == i) { break; }
+            }
+            WriteLine(cnt);
+        }
+    }
+}
+기본 수학 단계
+2839번
+using System;
+using System.Collections;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Console;
+
+namespace Ex
+{
+    class MainApp
+    {
+
+        static void Main(string[] args)
+        {
+            int N = int.Parse(ReadLine());
+            int ans = 0;
+            
+            
+            
+                for(int i = 0; i < N/3+1; i++)
+                {
+
+                    if (ans == N) {  break; }
+                    for (int j = 0; j < N/5+1; j++)
+                    {
+                        ans = 3 * i + 5 * j;
+                        if(ans == N) { WriteLine(i + j); break; }
+                    }
+                    
+
+                }
+            if (ans != N) { WriteLine(-1); }
+
+            
+            
+        }
+    }  } 
+    1193번
+    class Program
+{
+    static void Main(string[] args)
+    {
+        string X = Console.ReadLine();
+        int x = int.Parse(X);
+
+        int lineCount = 0;
+        int sum = 0;
+
+        // 몇번째 대각선에 있는지 계산
+        while (x > sum)
+        {
+            lineCount++;
+            sum += lineCount;
+        }
+
+        // 해당 줄에 몇번째인지 계산
+        int index = x - (sum - lineCount);
+
+        // 홀수
+        if (lineCount % 2 == 1)
+            Console.Write($"{lineCount - index + 1}/{index}");
+        // 짝수
+        else
+            Console.Write($"{index}/{lineCount - index + 1}");
+    }
+}
+1차원 배열 단계
+4344번
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+
+    
+int main()
+{
+    int num[1000], n, TC, sum;
+    float avg, ans,cnt;
+    scanf("%d", &TC);
+    while (TC > 0)
+    {
+        sum = 0;
+        cnt = 0;
+        scanf("%d", &n);
+        for (int i = 0;i < n;i++)
+        {
+            scanf("%d", &num[i]);
+            sum = sum + num[i];
+        }
+        avg = sum / (float)n;
+       
+        for(int i = 0; i<n;i++)
+        {
+            if (num[i] > avg) { cnt++; }
+        }
+        printf("%.3f%% \n", (cnt / n)*100);
+        TC--;
+    }
+    return 0;
+}
+10818번
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+
+int num[1000000];
+int main()
+{
+    int n, min = 1000000, max = -1000000;
+    
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &num[i]);
+    }
+   
+    for (int i = 0; i < n;i++)
+    {
+        if (num[i] >= max) { max = num[i]; }
+        if (num[i] <= min) {min = num[i]; }
+    }
+    printf("%d %d", min, max);
+    return 0;
+}
