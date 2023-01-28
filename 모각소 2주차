@@ -51,7 +51,7 @@ class Dinosaur:
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
-#키 입력통해 캐릭터 움직이기
+#키 입력시 캐릭터 움직임 설정(이미지로 표현)
     def update(self, userInput):
         if self.dino_duck:
             self.duck()
@@ -135,7 +135,7 @@ class Obstacle:
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.rect)
 
-#장애물 랜덤으로 생성, 생성시 위치설정
+#장애물 랜덤으로 생성(0,1,2에따라 다른 이미지 불러옴)
 class SmallCactus(Obstacle):
     def __init__(self, image):
         self.type = random.randint(0, 2)
@@ -218,7 +218,7 @@ def main():
             elif random.randint(0, 2) == 2:
                 obstacles.append(Bird(BIRD))
 
-        for obstacle in obstacles:
+        for obstacle in obstacles: #장애물에 닿으면 death +1
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
@@ -284,3 +284,6 @@ menu(death_count=0)
            3. 상속(inheritance) : 하나의 클래스가 상위 클래스의 모든 속성 및 메소드를 상속
            4. 다형성(polymorphism) : 기본 클래스와 가족으로 가지는 클래스
                                    : 실제 호출되어 실행되는 객체는 상황에 따라 기본 클래스가 아니고 가족 중 한 객체
+                                   
+                                   
+위의 게임 코드에서는 캐릭터 등의 물체의 움직임과 생성을 클래스를 통해 표현하여 이미지만 변경하면 다양한 연출이 가능하도록 해 보았다.                                    
